@@ -1,36 +1,36 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_constructors
 
-import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
-class Login extends StatefulWidget {
-  Login({Key? key}) : super(key: key);
+class Register extends StatefulWidget {
+  final VoidCallback showLogin;
+
+  Register({
+    Key? key,
+    required this.showLogin,
+  }) : super(key: key);
 
   @override
-  State<Login> createState() => _LoginState();
+  State<Register> createState() => _RegisterState();
 }
 
-class _LoginState extends State<Login> {
-//text controllers
+class _RegisterState extends State<Register> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-
-//signInfunc
-  Future signIn() async {
-    await FirebaseAuth.instance.signInWithEmailAndPassword(
-      email: _emailController.text.trim(),
-      password: _passwordController.text.trim(),
-    );
-  }
 
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
+  }
+
+  Future signUp() async {
+    await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim());
   }
 
   @override
@@ -48,7 +48,7 @@ class _LoginState extends State<Login> {
               children: [
                 //message
                 Text(
-                  "Hello There!",
+                  "Register",
                   style: GoogleFonts.bebasNeue(
                     fontSize: 52,
                   ),
@@ -57,7 +57,7 @@ class _LoginState extends State<Login> {
                   height: 10,
                 ),
                 Text(
-                  "Welcome Back!",
+                  "Create Your Account!",
                   style: TextStyle(
                     fontSize: 20,
                   ),
@@ -123,13 +123,44 @@ class _LoginState extends State<Login> {
                     ),
                   ),
                 ),
+                SizedBox(
+                  height: 15,
+                ),
+
+                //confirm password field
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 25.0,
+                  ),
+                  child: TextField(
+                    controller: _passwordController,
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: const Color(0xffA5BECC),
+                        ),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: const Color(0xff243A73),
+                        ),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      hintText: 'Enter Your Password',
+                      fillColor: Colors.grey[200],
+                      filled: true,
+                    ),
+                  ),
+                ),
                 SizedBox(height: 10),
 
                 //submit button
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25.0),
                   child: GestureDetector(
-                    onTap: signIn,
+                    onTap: signUp,
                     child: Container(
                       padding: EdgeInsets.all(20),
                       decoration: BoxDecoration(
@@ -137,7 +168,7 @@ class _LoginState extends State<Login> {
                           borderRadius: BorderRadius.circular(10)),
                       child: Center(
                         child: Text(
-                          'Sign In',
+                          'Sign Up',
                           style: TextStyle(
                               color: const Color(0xffffffff),
                               fontWeight: FontWeight.bold,
@@ -155,17 +186,20 @@ class _LoginState extends State<Login> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Not a member?',
+                      'Already a member?',
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                     SizedBox(
                       width: 5,
                     ),
-                    Text(
-                      'Register Now',
-                      style: TextStyle(
-                          color: const Color(0xff243A73),
-                          fontWeight: FontWeight.bold),
+                    GestureDetector(
+                      onTap: widget.showLogin,
+                      child: Text(
+                        'Sign in',
+                        style: TextStyle(
+                            color: const Color(0xff243A73),
+                            fontWeight: FontWeight.bold),
+                      ),
                     ),
                   ],
                 )

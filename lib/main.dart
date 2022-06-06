@@ -1,6 +1,6 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebasecrudapp/main_page.dart';
+import 'package:firebasecrudapp/auth/main_page.dart';
 import 'firebase_options.dart';
 import 'package:flutter/material.dart';
 
@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
-        useMaterial3: false,
+        useMaterial3: true,
       ),
       home: MainPage(),
     );
